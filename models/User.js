@@ -14,11 +14,14 @@ const userSchema = new mongoose.Schema({
 		default: false
 	},
 	orders: [{
-		products: {
-			productName: String,
-			quantity: Number
+		productName: {
+			type: String,
+			required: [true, "Product is required!"]
 		},
-		totalAmount: Number,
+		quantity: {
+			type: Number,
+			required: [true, "Quantity is required!"]
+		},
 		purchasedOnDate: {
 			type: Date,
 			default: new Date()
@@ -27,3 +30,4 @@ const userSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model("User", userSchema);
+////

@@ -14,18 +14,19 @@ router.post("/login", (req, res) => {
 })
 
 // Retrieves User Details
-router.post("/details", auth.verify, (req, res) => {
+router.get("/details", auth.verify, (req, res) => {
 	const userData = auth.decode(req.headers.authorization)
 	userControllers.getProfile({userId: req.body.id}).then(resultFromController => res.send(resultFromController));
 })
 
-// Order
-router.post("/enroll", auth.verify, (req, res) => {
+//Enroll
+router.post("/order", auth.verify, (req, res) => {
 	let data = {
 		userId: auth.decode(req.headers.authorization).id,
-		productId: req.body.productId
+		productName: req.body.productName,
+		quantity: req.body.quantity
 	}
-	userControllers.enroll(data).then(resultFromController => res.send(resultFromController));
+	userControllers.order(data).then(resultFromController => res.send(resultFromController));
 })
 
 module.exports = router;

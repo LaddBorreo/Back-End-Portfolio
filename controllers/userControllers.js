@@ -45,10 +45,10 @@ module.exports.getProfile = (data) => {
 	});
 }
 
-// Order
+//Enroll
 module.exports.order = async(data) => {
 	let isUserUpdated = await User.findById(data.userId).then(user => {
-		user.orders.push({productId: data.productId});
+		user.orders.push({productName: data.productName},{quantity: data.quantity});
 		return user.save().then((user, error) => {
 			if(error){
 				return false;	
@@ -57,8 +57,10 @@ module.exports.order = async(data) => {
 			};
 		});
 	});
+}
+	/*
 	let isProductUpdated = await Product.findById(data.productId).then(product => {
-		product.enrollees.push({userId: data.userId});
+		product.orders.push({userId: data.userId});
 		return product.save().then((product, error) => {	
 			if(error){
 				return false
@@ -73,3 +75,4 @@ module.exports.order = async(data) => {
 		return false;
 	};
 }
+*/
