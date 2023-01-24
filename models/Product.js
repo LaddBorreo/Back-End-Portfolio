@@ -20,10 +20,7 @@ const productSchema = new mongoose.Schema({
 	createdOnDate: {
 		type: Date,
 		default: new Date()
-	},
-	orders: [{
-		orderId : String
-		}]
+	}
 })
 
 module.exports = mongoose.model("Product", productSchema);

@@ -47,7 +47,8 @@ module.exports.updateProduct = (reqParams, reqBody) => {
 	let updatedProduct = {
 		name : reqBody.name,
 		description: reqBody.description,
-		price: reqBody.price
+		price: reqBody.price,
+		isActive: reqBody.isActive
 	};
 	return Product.findByIdAndUpdate(reqParams.productId, updatedProduct).then((product, error) => {
 		if(error){
@@ -58,7 +59,7 @@ module.exports.updateProduct = (reqParams, reqBody) => {
 	})
 }
 
-// Deletes Product
+// Archives Product
 module.exports.archiveProduct = (data) => {
 if(data.isAdmin === true){
 		let updateActiveField = {

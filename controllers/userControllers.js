@@ -35,44 +35,11 @@ module.exports.loginUser = (reqBody) => {
 	})
 }
 
-// Get Profile
-module.exports.getProfile = (data) => {
-	console.log(data)
-	return User.findById(data.userId).then(result => {
-		console.log(result);
+// Get User Details
+module.exports.getUser = (reqParams) => {
+	console.log(reqParams)
+	return User.findById(reqParams.userId).then(result => {
 		result.password = "";
 		return result;
 	});
 }
-
-//Enroll
-module.exports.order = async(data) => {
-	let isUserUpdated = await User.findById(data.userId).then(user => {
-		user.orders.push({productName: data.productName},{quantity: data.quantity});
-		return user.save().then((user, error) => {
-			if(error){
-				return false;	
-			} else {
-				return true;
-			};
-		});
-	});
-}
-	/*
-	let isProductUpdated = await Product.findById(data.productId).then(product => {
-		product.orders.push({userId: data.userId});
-		return product.save().then((product, error) => {	
-			if(error){
-				return false
-			} else {
-				return true
-			};
-		});
-	});
-	if(isUserUpdated && isProductUpdated){
-		return true;
-	} else {
-		return false;
-	};
-}
-*/

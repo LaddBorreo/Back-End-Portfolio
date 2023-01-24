@@ -12,22 +12,7 @@ const userSchema = new mongoose.Schema({
 	isAdmin: {
 		type: Boolean,
 		default: false
-	},
-	orders: [{
-		productName: {
-			type: String,
-			required: [true, "Product is required!"]
-		},
-		quantity: {
-			type: Number,
-			required: [true, "Quantity is required!"]
-		},
-		purchasedOnDate: {
-			type: Date,
-			default: new Date()
-		}	
-	}]
+	}
 })
 
 module.exports = mongoose.model("User", userSchema);
-////

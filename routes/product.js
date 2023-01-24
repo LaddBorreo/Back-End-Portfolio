@@ -35,7 +35,7 @@ router.put("/:productId", auth.verify, (req, res) => {
 })
 
 // Archives Product
-router.put("/:productId/archive", auth.verify, (req, res) => {
+router.put("/archive/:productId", auth.verify, (req, res) => {
 	const data = {
 		reqParams: req.params,
 		isAdmin: auth.decode(req.headers.authorization).isAdmin
