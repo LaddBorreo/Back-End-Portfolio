@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const orderSchema = new mongoose.Schema({
+const cartSchema = mongoose.Schema({
     userId: {
         type: String,
         required: true,
     },
-    username: {
+    userName: {
         type: String,
         required: true,
     },
@@ -33,14 +33,6 @@ const orderSchema = new mongoose.Schema({
             },
         },
     ],
-    totalAmount: {
-        type: Number,
-        required: true,
-    },
-    purchasedOn: {
-        type: Date,
-        default: new Date(),
-    },
 });
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model("Cart", cartSchema);

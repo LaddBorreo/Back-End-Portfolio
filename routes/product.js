@@ -1,46 +1,73 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+
 const router = express.Router();
-const productController = require("../controllers/productControllers");
-const auth = require("../auth")
+const userControllers = require("../controllers/userController");
+const productControllers = require("../controllers/productController");
+const auth = require("../auth.js");
 
-// Create Product
-router.post("/", auth.verify, (req, res) => {
-	const data = {
-		product: req.body,
-		isAdmin: auth.decode(req.headers.authorization).isAdmin
-	}
-	productController.addProduct(data).then(resultFromController => res.send(resultFromController));
+// Adding a product by the admin
+router.post("/addProduct", auth.verify, (req, res) => {
+    const data = {
+        isAdmin: auth.decode(req.headers.authorization).isAdmin,
+        products: req.body,
+    };
+
+    productControllers.addProduct(data).then((resultFromController) => {
+        res.send(resultFromController);
+    });
 });
 
-// Retrieves All Product
-router.get("/all", (req, res) => {
-	productController.getAllProduct().then(resultFromController => res.send(resultFromController));
-});
-
-// Retrieves All Active Products
+// show all products by anyone
 router.get("/", (req, res) => {
-	productController.getAllActive().then(resultFromController => res.send(resultFromController));
-})
-
-// Retrieves Single Product
-router.get("/:productId", (req, res) => {
-
-	productController.getProduct(req.params).then(resultFromController => res.send(resultFromController));
-})
-
-// Updates a Product
-router.put("/:productId", auth.verify, (req, res) => {
-
-	productController.updateProduct(req.params, req.body).then(resultFromController => res.send(resultFromController));
-})
-
-// Archives Product
-router.put("/archive/:productId", auth.verify, (req, res) => {
-	const data = {
-		reqParams: req.params,
-		isAdmin: auth.decode(req.headers.authorization).isAdmin
-	}
-	productController.archiveProduct(data).then(resultFromController => res.send(resultFromController));	
+    productControllers.showAll(req.body).then((resultFromController) => {
+        res.send(resultFromController);
+    });
 });
 
+// Retrieve as single product
+router.get("/specificProduct", (req, res) => {
+    let productId = req.body.productId;
+
+    productControllers
+        .showOneProduct({ productId })
+        .then((resultFromController) => {
+            res.send(resultFromController);
+        });
+});
+
+// Update product by admin only
+router.put("/updateProduct/:productId", auth.verify, (req, res) => {
+    const userData = auth.decode(req.headers.authorization);
+    if (userData.isAdmin) {
+        let data = {
+            Id: req.params.productId,
+            updatedData: req.body,
+        };
+
+        productControllers.updateProduct(data).then((resultFromController) => {
+            res.send(resultFromController);
+        });
+    } else {
+        res.send("You are not allowed to update a product");
+    }
+});
+
+// Archive active product (only Admin)
+router.put("/archive/:productId", auth.verify, (req, res) => {
+    const userData = auth.decode(req.headers.authorization).isAdmin;
+
+    if (userData) {
+        let productId = req.params.productId;
+        productControllers
+            .archiveProduct(productId)
+            .then((resultFromController) => {
+                res.send(resultFromController);
+            });
+    } else {
+        res.send("You are not allowed to archive a product");
+    }
+});
+
+// Exports all Routers
 module.exports = router;
